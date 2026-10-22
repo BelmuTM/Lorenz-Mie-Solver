@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
-#include <numbers>
 #include <valarray>
 
 using ComplexDouble      = std::complex<double>;
@@ -32,8 +31,8 @@ using ArrayComplexDouble = std::valarray<ComplexDouble>;
 namespace LorenzMie {
 
     struct Context {
-        double        particleRadius;
-        double        wavelength;
+        double        wavelength;     // Nanometers [nm]
+        double        particleRadius; // Nanometers [nm]
         ComplexDouble hostIOR;
         ComplexDouble particleIOR;
     };
@@ -42,7 +41,7 @@ namespace LorenzMie {
         ArrayComplexDouble electric;
         ArrayComplexDouble magnetic;
 
-        int maxOrders() const {
+        [[nodiscard]] int maxOrders() const {
             return static_cast<int>(electric.size()) - 2;
         }
     };
@@ -64,5 +63,6 @@ namespace LorenzMie {
 
     ScatteringProperties calculateScatteringProperties(const Context& context, const Coefficients& coefficients);
 
+    // Scattering angle is in degrees, converted to radians internally.
     PhaseFunction calculatePhaseFunction(const Coefficients& coefficients, double scatteringAngle);
 }

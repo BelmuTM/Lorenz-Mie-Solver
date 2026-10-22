@@ -54,7 +54,9 @@ using namespace std::complex_literals;
 
 namespace {
 
-    constexpr double pi = std::numbers::pi;
+    constexpr double PI = std::numbers::pi;
+
+    constexpr double DEGREES_TO_RADIANS = PI / 180.0;
 
     double complexAbsSquared(const ComplexDouble x) {
         return std::abs(x) * std::abs(x);
@@ -141,8 +143,8 @@ namespace LorenzMie {
 
     Coefficients calculateMieCoefficients(const Context& context) {
 
-        const ComplexDouble hostWaveNumber     = 2.0 * pi * context.hostIOR     / context.wavelength;
-        const ComplexDouble particleWaveNumber = 2.0 * pi * context.particleIOR / context.wavelength;
+        const ComplexDouble hostWaveNumber     = 2.0 * PI * context.hostIOR     / context.wavelength;
+        const ComplexDouble particleWaveNumber = 2.0 * PI * context.particleIOR / context.wavelength;
 
         const ComplexDouble hostSizeParameter     = hostWaveNumber     * context.particleRadius;
         const ComplexDouble particleSizeParameter = particleWaveNumber * context.particleRadius;
@@ -225,7 +227,7 @@ namespace LorenzMie {
         }
 
         // Host medium radial optical depth
-        const double alpha = 4.0 * pi * context.particleRadius * std::imag(context.hostIOR) / context.wavelength;
+        const double alpha = 4.0 * PI * context.particleRadius * std::imag(context.hostIOR) / context.wavelength;
         // Corrects for incident-field attenuation across the particle surface
         const double gamma = alpha < 1e-3
             ? 1.0 + 2.0 / 3.0 * alpha + 0.25 * alpha * alpha
@@ -236,8 +238,8 @@ namespace LorenzMie {
 
         ScatteringProperties properties{};
 
-        properties.extinction = wavelengthSq / (2.0 * pi) * extinctionSum;
-        properties.scattering = wavelengthSq * std::exp(-alpha) / (2.0 * pi * gamma * hostIORAbsSq) * scatteringSum;
+        properties.extinction = wavelengthSq / (2.0 * PI) * extinctionSum;
+        properties.scattering = wavelengthSq * std::exp(-alpha) / (2.0 * PI * gamma * hostIORAbsSq) * scatteringSum;
 
         properties.asymmetry = asymmetrySum / (0.5 * scatteringSum);
 
@@ -246,7 +248,7 @@ namespace LorenzMie {
 
     PhaseFunction calculatePhaseFunction(const Coefficients& coefficients, const double scatteringAngle) {
 
-        const double cosTheta = std::cos(scatteringAngle);
+        const double cosTheta = std::cos(scatteringAngle * DEGREES_TO_RADIANS);
 
         double angularPi_m1 = 0.0; // pi_{n-1}
         double angularPi_m2 = 0.0; // pi_{n-2}
@@ -282,7 +284,7 @@ namespace LorenzMie {
             angularPi_m1 = angularPi_n;
         }
 
-        const double phaseNormalization = 2.0 * pi * scatteringSum;
+        const double phaseNormalization = 2.0 * PI * scatteringSum;
 
         PhaseFunction phase{};
 
