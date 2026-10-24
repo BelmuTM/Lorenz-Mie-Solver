@@ -15,6 +15,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(Lorenz_Mie_Solver ${SOURCES})
 
+target_compile_definitions(Lorenz_Mie_Solver PRIVATE
+    OUTPUT_DIR="${CMAKE_SOURCE_DIR}/output"
+)
+
 # Ensure C++ 20 features
 target_compile_features(Lorenz_Mie_Solver PRIVATE cxx_std_20)
 
