@@ -18,6 +18,20 @@
   ></a>
 </p>
 
+Solver for the generalized Lorenz-Mie solution to Maxwell's equations. It computes extinction/scattering cross sections, asymmetry factors
+and phase functions (unpolarized, perpendicular, parallel) from a set of parameters:
+1. Indices of refraction of particle(s) and host medium
+2. Volume fraction of particle(s) in the host medium
+3. Range of particle radii (i.e.: 1'000nm - 20'000nm)
+4. Range of wavelengths (i.e.: 390nm - 830nm)
+5. Integration resolutions for particle radii, wavelengths and angles
+
+# References
+   - [Bohren, C. F., & Huffman, D. R. (1983). Absorption and Scattering of Light by Small Particles.](https://onlinelibrary.wiley.com/doi/book/10.1002/9783527618156)
+   - [Frisvad et al. (2007). Computing the Scattering Properties of Participating Media Using Lorenz-Mie Theory.](https://cseweb.ucsd.edu//~henrik/papers/lorenz_mie_theory/)
+   - [Wikipedia. (2026). Legendre polynomials.](https://en.wikipedia.org/wiki/Legendre_polynomials)
+   - [Wikipedia. (2026). Mie scattering.](https://en.wikipedia.org/wiki/Mie_scattering)
+
 # Compiling
 
 > [!IMPORTANT]
@@ -30,22 +44,18 @@
 
 ### Linux Package Dependencies
 
-<details>
-<summary>Ubuntu / Debian Package Dependencies</summary>
+Ubuntu / Debian Package Dependencies
 
 ```
 sudo apt-get update
 sudo apt-get install -y cmake git
 ```
-</details>
 
-<details>
-<summary>Arch Linux dependencies</summary>
+Arch Linux dependencies
 
 ```bash
 sudo pacman -Sy cmake git
 ```
-</details>
 
 # License
 
