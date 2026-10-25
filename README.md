@@ -26,6 +26,8 @@ and phase functions (unpolarized, perpendicular, parallel) from a set of paramet
 4. Range of wavelengths (e.g.: 390nm - 830nm)
 5. Integration resolutions for particle radii, wavelengths and angles
 
+Python scripts to plot the results per wavelength/angle are included.
+
 # References
    - [Bohren, C. F., & Huffman, D. R. (1983). Absorption and Scattering of Light by Small Particles.](https://onlinelibrary.wiley.com/doi/book/10.1002/9783527618156)
    - [Frisvad et al. (2007). Computing the Scattering Properties of Participating Media Using Lorenz-Mie Theory.](https://cseweb.ucsd.edu//~henrik/papers/lorenz_mie_theory/)
