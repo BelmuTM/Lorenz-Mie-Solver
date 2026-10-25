@@ -31,7 +31,7 @@
 constexpr double PARTICLE_RADIUS_LOWER_BOUND =  5'000; // Nanometers [nm]
 constexpr double PARTICLE_RADIUS_UPPER_BOUND = 15'000; // Nanometers [nm]
 
-constexpr int PARTICLE_RADIUS_RESOLUTION = 100; // Amount of different particle sizes accounted for in the bulk medium
+constexpr int PARTICLE_RADIUS_RESOLUTION = 200; // Amount of different particle sizes accounted for in the bulk medium
 
 constexpr int WAVELENGTH_LOWER_BOUND = 390; // Nanometers [nm]
 constexpr int WAVELENGTH_UPPER_BOUND = 830; // Nanometers [nm]
