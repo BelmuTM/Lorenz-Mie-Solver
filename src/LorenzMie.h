@@ -27,12 +27,23 @@
 
 using ComplexDouble      = std::complex<double>;
 using ArrayComplexDouble = std::valarray<ComplexDouble>;
+using ArrayDouble        = std::valarray<double>;
 
 namespace LorenzMie {
 
     struct Context {
         double        wavelength;     // Nanometers [nm]
         double        particleRadius; // Nanometers [nm]
+        ComplexDouble hostIOR;
+        ComplexDouble particleIOR;
+    };
+
+    struct BulkContext {
+        double        wavelength;        // Nanometers [nm]
+        double        particleRadiusMin; // Nanometers [nm]
+        double        particleRadiusMax; // Nanometers [nm]
+        int           particleRadiusBins;
+        ArrayDouble   numberDensities;
         ComplexDouble hostIOR;
         ComplexDouble particleIOR;
     };
@@ -59,10 +70,31 @@ namespace LorenzMie {
         double unpolarized;
     };
 
+    // Individual particle properties
+
     Coefficients calculateMieCoefficients(const Context& context);
 
     ScatteringProperties calculateScatteringProperties(const Context& context, const Coefficients& coefficients);
 
     // Scattering angle is in degrees, converted to radians internally.
     PhaseFunction calculatePhaseFunction(const Coefficients& coefficients, double scatteringAngle);
+
+    // Bulk medium properties
+
+    void calculateBulkProperties(
+        const BulkContext&    context,
+        double                scatteringAngle,
+        ScatteringProperties& properties,
+        PhaseFunction&        phase
+    );
+
+    double particleSizeDistributionLogNormal(double particleRadius, double mean, double standardDeviation);
+
+    void calculateBulkNumberDensities(
+        BulkContext& context,
+        double       targetVolumeFraction,
+        double       mean,
+        double       standardDeviation
+    );
+
 }
