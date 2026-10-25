@@ -3,7 +3,20 @@
 <a href="https://patreon.com/Belmu"><img src="https://i.imgur.com/XNsj1Qx.png" title="Patreon Page" width="15%" height="15%"></a>
 <a href="https://discord.gg/jjRrhpkH9e"><img src="https://i.imgur.com/egvRtMf.png" title="Discord Server" width="15%" height="15%"></a>
 
-![Phase function](https://imgur.com/a/FOVeLKf.png)
+<p align="left">
+  <a>
+  <img
+    src="https://i.imgur.com/glQ08GO.png"
+    width="40%"
+    height="40%"
+  ></a>
+  <a>
+  <img
+    src="https://i.imgur.com/0NStZzn.png"
+    width="55%"
+    height="55%"
+  ></a>
+</p>
 
 # Compiling
 
