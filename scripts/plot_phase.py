@@ -35,7 +35,7 @@ def parse_args():
 
     parser.add_argument("wavelengths", nargs="*", type=float, default=[440.0], help="Wavelengths in nanometers (nm)")
     parser.add_argument("--type", choices=PHASE_TYPES, default="unpolarized")
-    parser.add_argument("--no-save", action="store_true", help="Do not write the PNG")
+    parser.add_argument("--no-save", action="store_true", help="Do not write the PNG file")
 
     return parser.parse_args()
 

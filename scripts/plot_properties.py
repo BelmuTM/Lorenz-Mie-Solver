@@ -32,7 +32,7 @@ SAVE_PNG   = True
 def parse_args():
     parser = argparse.ArgumentParser(description="Plot of the Lorenz-Mie scattering properties (extinction, scattering, asymmetry).")
 
-    parser.add_argument("--no-save", action="store_true", help="Do not write the PNG")
+    parser.add_argument("--no-save", action="store_true", help="Do not write the PNG files")
 
     return parser.parse_args()
 
