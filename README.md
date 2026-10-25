@@ -22,8 +22,8 @@ Solver for the generalized Lorenz-Mie solution to Maxwell's equations. It comput
 and phase functions (unpolarized, perpendicular, parallel) from a set of parameters:
 1. Indices of refraction of particle(s) and host medium
 2. Volume fraction of particle(s) in the host medium
-3. Range of particle radii (i.e.: 1'000nm - 20'000nm)
-4. Range of wavelengths (i.e.: 390nm - 830nm)
+3. Range of particle radii (e.g.: 1'000nm - 20'000nm)
+4. Range of wavelengths (e.g.: 390nm - 830nm)
 5. Integration resolutions for particle radii, wavelengths and angles
 
 # References
