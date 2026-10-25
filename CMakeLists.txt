@@ -27,26 +27,14 @@ target_include_directories(Lorenz_Mie_Solver PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 # ---- Third-party Libraries -------------------------------------------------------------------------------------------
 
-# glm
-add_subdirectory(external/glm)
-
-target_compile_definitions(
-    glm
-    INTERFACE
-    GLM_FORCE_CXX20
-)
+find_package(OpenMP REQUIRED)
 
 # Link compiled libraries to executable
 target_link_libraries(
     Lorenz_Mie_Solver
     PRIVATE
-    glm
+    OpenMP::OpenMP_CXX
+    gomp
 )
 
-# Include directories
-target_include_directories(
-    Lorenz_Mie_Solver
-    SYSTEM
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/external
-)
+target_link_options(Lorenz_Mie_Solver PRIVATE -static-libgcc -static-libstdc++ -static)

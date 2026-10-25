@@ -296,24 +296,22 @@ namespace LorenzMie {
     }
 
     void calculateBulkProperties(
-        const BulkContext&    context,
-        const double          scatteringAngle,
-        ScatteringProperties& properties,
-        PhaseFunction&        phase
+        const BulkContext&          context,
+        const ArrayDouble&          scatteringAngles,
+        ScatteringProperties&       properties,
+        std::vector<PhaseFunction>& phases
     ) {
 
-        properties = ScatteringProperties(0.0, 0.0, 0.0);
-
-        phase = PhaseFunction(0.0, 0.0, 0.0);
+        phases.resize(scatteringAngles.size());
 
         const double particleRadiusStep =
             (context.particleRadiusMax - context.particleRadiusMin) / context.particleRadiusBins;
 
-        for (int i = 0; i < context.particleRadiusBins; i++) {
+        for (int r = 0; r < context.particleRadiusBins; r++) {
 
-            const double numberDensityStep = context.numberDensities[i] * particleRadiusStep;
+            const double numberDensityStep = context.numberDensities[r] * particleRadiusStep;
 
-            const double particleRadius = context.particleRadiusMin + (i + 0.5) * particleRadiusStep;
+            const double particleRadius = context.particleRadiusMin + (r + 0.5) * particleRadiusStep;
 
             const Context mieContext(context.wavelength, particleRadius, context.hostIOR, context.particleIOR);
 
@@ -326,32 +324,38 @@ namespace LorenzMie {
 
             properties.asymmetry += asymmetry  * scattering * numberDensityStep;
 
-            const auto [senkrecht, parallel, unpolarized] = calculatePhaseFunction(mieCoefficients, scatteringAngle);
+            for (int a = 0; a < scatteringAngles.size(); a++) {
 
-            phase.senkrecht   += senkrecht   * scattering * numberDensityStep;
-            phase.parallel    += parallel    * scattering * numberDensityStep;
-            phase.unpolarized += unpolarized * scattering * numberDensityStep;
+                const auto [senkrecht, parallel, unpolarized] = calculatePhaseFunction(mieCoefficients, scatteringAngles[a]);
+
+                phases[a].senkrecht   += senkrecht   * scattering * numberDensityStep;
+                phases[a].parallel    += parallel    * scattering * numberDensityStep;
+                phases[a].unpolarized += unpolarized * scattering * numberDensityStep;
+
+            }
         }
 
         properties.asymmetry /= properties.scattering;
 
-        phase.senkrecht   /= properties.scattering;
-        phase.parallel    /= properties.scattering;
-        phase.unpolarized /= properties.scattering;
+        for (int a = 0; a < scatteringAngles.size(); a++) {
+
+            phases[a].senkrecht   /= properties.scattering;
+            phases[a].parallel    /= properties.scattering;
+            phases[a].unpolarized /= properties.scattering;
+        }
     }
 
     double particleSizeDistributionLogNormal(
         const double particleRadius,
-        const double mean,
-        const double standardDeviation
+        const double meanRadius,
+        const double radiusStandardDeviation
     ) {
-        const double ratioSq = standardDeviation * standardDeviation / (mean * mean);
+        const double ratioSq = radiusStandardDeviation * radiusStandardDeviation / (meanRadius * meanRadius);
 
-        const double alpha = std::log(mean) - 0.5 * std::log(ratioSq + 1.0);
+        const double alpha = std::log(meanRadius) - 0.5 * std::log(ratioSq + 1.0);
         const double beta  = std::sqrt(std::log(ratioSq + 1.0));
 
         // 1 / (r^4) here makes the distribution volume-weighted (proportional to the particle's volume)
-        // 1 / r would make it number-weighted (proportionaal to the number of droplets)
         return 1.0 / (std::pow(particleRadius, 4.0) * beta * std::sqrt(2.0 * PI))
             * std::exp(-0.5 * std::pow((std::log(particleRadius) - alpha) / beta, 2.0));
     }
@@ -359,8 +363,8 @@ namespace LorenzMie {
     void calculateBulkNumberDensities(
         BulkContext& context,
         const double targetVolumeFraction,
-        const double mean,
-        const double standardDeviation
+        const double meanRadius,
+        const double radiusStandardDeviation
     ) {
 
         double volumeMoment = 0.0;
@@ -370,19 +374,20 @@ namespace LorenzMie {
         const double particleRadiusStep =
             (context.particleRadiusMax - context.particleRadiusMin) / context.particleRadiusBins;
 
-        for (int i = 0; i < context.particleRadiusBins; i++) {
+        for (int r = 0; r < context.particleRadiusBins; r++) {
 
-            const double particleRadius = context.particleRadiusMin + (i + 0.5) * particleRadiusStep;
+            const double particleRadius = context.particleRadiusMin + (r + 0.5) * particleRadiusStep;
 
-            context.numberDensities[i] = particleSizeDistributionLogNormal(particleRadius, mean, standardDeviation);
+            context.numberDensities[r] =
+                particleSizeDistributionLogNormal(particleRadius, meanRadius, radiusStandardDeviation);
 
-            volumeMoment += std::pow(particleRadius, 3.0) * context.numberDensities[i] * particleRadiusStep;
+            volumeMoment += std::pow(particleRadius, 3.0) * context.numberDensities[r] * particleRadiusStep;
         }
 
         const double numberDensityScale = targetVolumeFraction / (4.0 * PI / 3.0 * volumeMoment);
 
-        for (int i = 0; i < context.particleRadiusBins; i++) {
-            context.numberDensities[i] *= numberDensityScale;
+        for (int r = 0; r < context.particleRadiusBins; r++) {
+            context.numberDensities[r] *= numberDensityScale;
         }
     }
 

@@ -24,6 +24,7 @@
 #include <cmath>
 #include <complex>
 #include <valarray>
+#include <vector>
 
 using ComplexDouble      = std::complex<double>;
 using ArrayComplexDouble = std::valarray<ComplexDouble>;
@@ -58,16 +59,16 @@ namespace LorenzMie {
     };
 
     struct ScatteringProperties {
-        double extinction;
-        double scattering;
+        double extinction = 0.0;
+        double scattering = 0.0;
 
-        double asymmetry;
+        double asymmetry = 0.0;
     };
 
     struct PhaseFunction {
-        double senkrecht;
-        double parallel;
-        double unpolarized;
+        double senkrecht   = 0.0;
+        double parallel    = 0.0;
+        double unpolarized = 0.0;
     };
 
     // Individual particle properties
@@ -82,19 +83,19 @@ namespace LorenzMie {
     // Bulk medium properties
 
     void calculateBulkProperties(
-        const BulkContext&    context,
-        double                scatteringAngle,
-        ScatteringProperties& properties,
-        PhaseFunction&        phase
+        const BulkContext&          context,
+        const ArrayDouble&          scatteringAngles,
+        ScatteringProperties&       properties,
+        std::vector<PhaseFunction>& phases
     );
 
-    double particleSizeDistributionLogNormal(double particleRadius, double mean, double standardDeviation);
+    double particleSizeDistributionLogNormal(double particleRadius, double meanRadius, double radiusStandardDeviation);
 
     void calculateBulkNumberDensities(
         BulkContext& context,
         double       targetVolumeFraction,
-        double       mean,
-        double       standardDeviation
+        double       meanRadius,
+        double       radiusStandardDeviation
     );
 
 }
