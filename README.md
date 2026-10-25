@@ -18,7 +18,7 @@
   ></a>
 </p>
 
-Solver for the generalized Lorenz-Mie solution to Maxwell's equations. It computes extinction/scattering cross sections, asymmetry factors
+Implementation of the generalized Lorenz-Mie solution to Maxwell's equations. It outputs tabulated data for extinction/scattering cross sections, asymmetry factors
 and phase functions (unpolarized, perpendicular, parallel) from a set of parameters:
 1. Indices of refraction of particle(s) and host medium
 2. Volume fraction of particle(s) in the host medium
