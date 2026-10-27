@@ -41,7 +41,7 @@ constexpr int ANGLE_RESOLUTION      = 720; // Amount of angles between 0° and 1
 
 constexpr double NM_TO_M = 1e9;
 
-constexpr double waterVolumeFraction          = 0.01 / 10e6; // LWC (liquid water content) / water density (1000 kg/m3)
+constexpr double waterVolumeFraction          = 0.01 / 1e6; // LWC (liquid water content) / water density (1000 kg/m3)
 constexpr double waterMeanVolume              = 7'000; // Nanometers [nm]
 constexpr double waterVolumeStandardDeviation = 4'500; // Nanometers [nm]
 
