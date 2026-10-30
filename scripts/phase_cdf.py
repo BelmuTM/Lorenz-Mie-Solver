@@ -32,7 +32,7 @@ def calculate_phase_cdf_normalized(wavelengths, angles, phase):
     wavelengths_n = len(wavelengths)
     angles_n      = len(angles)
 
-    # Convert the angles from degrees to cos(angle_radians)
+    # Convert the angles from angle_degrees to cos(angle_radians)
     angles = np.cos(np.deg2rad(angles))
 
     cdf = np.zeros((wavelengths_n, angles_n))
@@ -61,3 +61,53 @@ def calculate_phase_cdf_normalized(wavelengths, angles, phase):
             cdf[w][a]   /= max_cdf
 
     return phase, cdf
+
+
+def calculate_invert_cdf(wavelengths, angles, phase, cdf):
+    """
+    :param wavelengths: list of wavelengths in nanometers
+    :param angles: list of angles in degrees
+    :param phase: list of normalized phase values
+    :param cdf: list of normalized phase CDF values
+    :return: inverted phase CDF, values are angles in radians
+    """
+
+    wavelengths_n = len(wavelengths)
+    angles_n      = len(angles)
+
+    samples_n = angles_n
+
+    # Convert the angles from angle_degrees to cos(angle_radians)
+    angles = np.cos(np.deg2rad(angles))
+
+    inv_cdf = np.zeros((wavelengths_n, samples_n))
+
+    for w in range(0, wavelengths_n):
+
+        a = 1
+
+        for k in range(0, samples_n):
+
+            xi = k / (samples_n - 1)
+
+            # Find the interval [a-1 ; a] containing xi (xi is strictly increasing)
+            while a < angles_n - 1 and cdf[w][a] < xi:
+                a += 1
+
+            p0 = phase[w][a - 1]
+            p1 = phase[w][a]
+
+            area = (xi - cdf[w][a - 1]) / (2.0 * np.pi)
+
+            slope = (p1 - p0) / (angles[a - 1] - angles[a])
+
+            denominator = p0 + np.sqrt(max(p0 * p0 + 2.0 * slope * area, 0.0))
+
+            root = 2.0 * area / denominator if denominator > 0.0 else 0.0
+
+            inv_cdf[w][k] = angles[a - 1] - root
+
+    # Convert the angles from cos(angle_radians) to angle_radians
+    inv_cdf = np.arccos(np.clip(inv_cdf, -1.0, 1.0))
+
+    return inv_cdf

@@ -38,6 +38,15 @@ TOLERANCE = 1e-6
 
 
 def bake_lorenz_mie_luts():
+    """
+    Stores Lorenz-Mie extinction and scattering cross-sections, asymmetry factors, phase and inverse phase CDF
+    values into raw bytes files:
+
+    properties file (1D LUT): extinction, scattering, asymmetry, padding (16 bytes per wavelength)
+    phase file (2D LUT):
+        4 bytes phase value (per angle per wavelength)
+        4 bytes phase angle in radians (per random value per wavelength)
+    """
 
     cross_sections = pd.read_csv(cross_sections_input)
     asymmetries    = pd.read_csv(asymmetry_input)
@@ -83,12 +92,14 @@ def bake_lorenz_mie_luts():
 
     phase = phases["unpolarized"].to_numpy().reshape(wavelength_count, angle_count).tolist()
 
-    # Normalize phase and compute phase CDF
-    phase, cdf = phase_cdf.calculate_phase_cdf_normalized(
-        wavelengths.tolist(), expected_angles.tolist(), phase
-    )
+    # Normalize phase and compute both the phase CDF and its inverse
+    wavelengths_list = wavelengths.tolist()
+    angles_list      = expected_angles.tolist()
 
-    np.stack([phase, cdf], axis=-1).astype("<f4").tofile(phase_output)
+    phase, cdf = phase_cdf.calculate_phase_cdf_normalized(wavelengths_list, angles_list, phase)
+    inv_cdf    = phase_cdf.calculate_invert_cdf(wavelengths_list, angles_list, phase, cdf)
+
+    np.stack([phase, inv_cdf], axis=-1).astype("<f4").tofile(phase_output)
 
     print(f"Wavelengths: {wavelengths[0]}-{wavelengths[-1]} nm, resolution {wavelength_resolution} ({wavelength_count} entries)")
     print(f"Angles: 0-180 deg, resolution {angle_resolution} ({angle_count} entries)")
