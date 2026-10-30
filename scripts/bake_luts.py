@@ -43,9 +43,10 @@ def bake_lorenz_mie_luts():
     values into raw bytes files:
 
     properties file (1D LUT): extinction, scattering, asymmetry, padding (16 bytes per wavelength)
-    phase file (2D LUT):
-        4 bytes phase value (per angle per wavelength)
-        4 bytes phase angle in radians (per random value per wavelength)
+
+    phase file (2D LUT, x = wavelength, y = angle):
+        - R channel (4 bytes): phase value (per angle per wavelength)
+        - G channel (4 bytes): phase angle in radians (per random value per wavelength)
     """
 
     cross_sections = pd.read_csv(cross_sections_input)
@@ -99,7 +100,11 @@ def bake_lorenz_mie_luts():
     phase, cdf = phase_cdf.calculate_phase_cdf_normalized(wavelengths_list, angles_list, phase)
     inv_cdf    = phase_cdf.calculate_invert_cdf(wavelengths_list, angles_list, phase, cdf)
 
-    np.stack([phase, inv_cdf], axis=-1).astype("<f4").tofile(phase_output)
+    # Write 2D LUT for the X axis to be wavelength and Y axis to be angles/random value
+    lut = np.stack([phase, inv_cdf], axis=-1)
+    lut = np.transpose(lut, (1, 0, 2))
+
+    lut.astype("<f4").tofile(phase_output)
 
     print(f"Wavelengths: {wavelengths[0]}-{wavelengths[-1]} nm, resolution {wavelength_resolution} ({wavelength_count} entries)")
     print(f"Angles: 0-180 deg, resolution {angle_resolution} ({angle_count} entries)")
