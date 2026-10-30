@@ -26,7 +26,9 @@ and phase functions (unpolarized, perpendicular, parallel) from a set of paramet
 4. Range of wavelengths (e.g.: 390nm - 830nm)
 5. Integration resolutions for particle radii, wavelengths and angles
 
-Python scripts to plot the results per wavelength/angle are included.
+Python scripts to plot the results per wavelength/angle and to bake the data into raw bytes LUTs are included.
+
+A method to compute the phase's CDF and its inverse is also presented in the scripts folder.
 
 # References
    - [Bohren, C. F., & Huffman, D. R. (1983). Absorption and Scattering of Light by Small Particles.](https://onlinelibrary.wiley.com/doi/book/10.1002/9783527618156)
