@@ -18,31 +18,24 @@
 #                                                                               #
 #################################################################################
 
-# Script to calculate the forward CDF of the phase and the normalized phase from it
-
 import numpy as np
 
 
-def calculate_phase_cdf_normalized(phase_data, phase_type="unpolarized"):
-
-    wavelengths = np.sort(phase_data["wavelength"].unique())  # Nanometers
-    angles      = np.sort(phase_data["angle"].unique())       # Degrees
-
-    phase = (
-        phase_data
-        .pivot(index="wavelength", columns="angle", values=phase_type)
-        .loc[wavelengths, angles]
-        .to_numpy(dtype=np.float64)
-    )
+def calculate_phase_cdf_normalized(wavelengths, angles, phase):
+    """
+    :param wavelengths: list of wavelengths in nanometers
+    :param angles: list of angles in degrees
+    :param phase: list of phase values, indexed by wavelength and angle
+    :return: normalized phase and its normalized forward CDF
+    """
 
     wavelengths_n = len(wavelengths)
     angles_n      = len(angles)
 
     # Convert the angles from degrees to cos(angle_radians)
-    for a in range(0, angles_n):
-        angles[a] = np.cos(np.deg2rad(angles[a]))
+    angles = np.cos(np.deg2rad(angles))
 
-    cdf = [[0.0 for _ in range(0, angles_n)] for _ in range(0, wavelengths_n)]
+    cdf = np.zeros((wavelengths_n, angles_n))
 
     # Integrate the forward CDF using trapezoids
     for w in range(0, wavelengths_n):
@@ -61,8 +54,6 @@ def calculate_phase_cdf_normalized(phase_data, phase_type="unpolarized"):
     for w in range(0, wavelengths_n):
 
         max_cdf = cdf[w][-1]
-
-        print(max_cdf)
 
         for a in range(0, angles_n):
 
