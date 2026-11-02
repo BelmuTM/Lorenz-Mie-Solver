@@ -44,7 +44,7 @@ namespace RefractiveIndex {
                dispersion += 2.062501582e-2 * lambdaSq / (lambdaSq - 2.624158904e-2);
                dispersion += 1.123965424e-1 * lambdaSq / (lambdaSq - 1.067505178e1 );
 
-        return dispersion;
+        return std::sqrt(dispersion);
     }
 
     static double compressibility(double T, const double p, const double xw) {

@@ -29,21 +29,21 @@
 #include <iostream>
 
 constexpr double PARTICLE_RADIUS_LOWER_BOUND = 1'000; // Nanometers [nm]
-constexpr double PARTICLE_RADIUS_UPPER_BOUND = 20'000; // Nanometers [nm]
+constexpr double PARTICLE_RADIUS_UPPER_BOUND = 25'000; // Nanometers [nm]
 
-constexpr int PARTICLE_RADIUS_RESOLUTION = 700; // Amount of different particle sizes accounted for in the bulk medium
+constexpr int PARTICLE_RADIUS_RESOLUTION = 200; // Amount of different particle sizes accounted for in the bulk medium
 
 constexpr double WAVELENGTH_LOWER_BOUND = 390; // Nanometers [nm]
 constexpr double WAVELENGTH_UPPER_BOUND = 830; // Nanometers [nm]
 
-constexpr int WAVELENGTH_RESOLUTION = 880; // Amount of wavelengths between the lower and upper bounds
+constexpr int WAVELENGTH_RESOLUTION = 440; // Amount of wavelengths between the lower and upper bounds
 constexpr int ANGLE_RESOLUTION      = 720; // Amount of angles between 0° and 180°
 
 constexpr double NM_TO_M = 1e9;
 
-constexpr double waterVolumeFraction          = 0.01 / 1e6; // LWC (liquid water content) / water density (1000 kg/m3)
-constexpr double waterMeanVolume              = 7'000; // Nanometers [nm]
-constexpr double waterVolumeStandardDeviation = 4'500; // Nanometers [nm]
+constexpr double waterVolumeFraction          = 0.02 / 1e6; // LWC (liquid water content) / water density (1000 kg/m3)
+constexpr double waterMeanRadius              = 7'000; // Nanometers [nm]
+constexpr double waterRadiusStandardDeviation = 4'500; // Nanometers [nm]
 
 const std::string outputFolder = OUTPUT_DIR;
 
@@ -127,7 +127,7 @@ int main() {
             waterIOR
         );
 
-        calculateBulkNumberDensities(bulkContext, waterVolumeFraction, waterMeanVolume, waterVolumeStandardDeviation);
+        calculateBulkNumberDensities(bulkContext, waterVolumeFraction, waterMeanRadius, waterRadiusStandardDeviation);
 
         WavelengthResult& result = results[w];
         result.wavelength = wavelength;
