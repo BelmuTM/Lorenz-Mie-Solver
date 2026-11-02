@@ -58,11 +58,7 @@ namespace {
 
     constexpr double DEGREES_TO_RADIANS = PI / 180.0;
 
-    double complexAbsSquared(const ComplexDouble x) {
-        return std::abs(x) * std::abs(x);
-    }
-
-        void calculateRiccatiBesselLogDerivatives(
+    void calculateRiccatiBesselLogDerivatives(
         ArrayComplexDouble& besselDerivatives,
         const ComplexDouble sizeParameter,
         const int           startOrder
@@ -210,7 +206,7 @@ namespace LorenzMie {
             // Extinction, scattering cross-sections
 
             extinctionSum += (2.0 * n + 1.0) * std::real((electricCoeff_n + magneticCoeff_n) / hostIORSq);
-            scatteringSum += (2.0 * n + 1.0) * (complexAbsSquared(electricCoeff_n) + complexAbsSquared(magneticCoeff_n));
+            scatteringSum += (2.0 * n + 1.0) * (std::norm(electricCoeff_n) + std::norm(magneticCoeff_n));
 
             // Asymmetry
 
@@ -234,7 +230,7 @@ namespace LorenzMie {
             : 2.0 * (1.0 + (alpha - 1.0) * std::exp(alpha)) / (alpha * alpha);
 
         const double wavelengthSq = context.wavelength * context.wavelength;
-        const double hostIORAbsSq = complexAbsSquared(context.hostIOR);
+        const double hostIORAbsSq = std::norm(context.hostIOR);
 
         ScatteringProperties properties{};
 
@@ -278,7 +274,7 @@ namespace LorenzMie {
             scatteringAmp_S += amplitudeWeight * (electricCoeff_n * angularPi_n + magneticCoeff_n * angularTau_n);
             scatteringAmp_P += amplitudeWeight * (magneticCoeff_n * angularPi_n + electricCoeff_n * angularTau_n);
 
-            scatteringSum += (2.0 * n + 1.0) * (complexAbsSquared(electricCoeff_n) + complexAbsSquared(magneticCoeff_n));
+            scatteringSum += (2.0 * n + 1.0) * (std::norm(electricCoeff_n) + std::norm(magneticCoeff_n));
 
             angularPi_m2 = angularPi_m1;
             angularPi_m1 = angularPi_n;
@@ -288,8 +284,8 @@ namespace LorenzMie {
 
         PhaseFunction phase{};
 
-        phase.senkrecht   = complexAbsSquared(scatteringAmp_S) / phaseNormalization;
-        phase.parallel    = complexAbsSquared(scatteringAmp_P) / phaseNormalization;
+        phase.senkrecht   = std::norm(scatteringAmp_S) / phaseNormalization;
+        phase.parallel    = std::norm(scatteringAmp_P) / phaseNormalization;
         phase.unpolarized = (phase.senkrecht + phase.parallel) * 0.5;
 
         return phase;
