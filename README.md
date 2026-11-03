@@ -3,20 +3,7 @@
 <a href="https://patreon.com/Belmu"><img src="https://i.imgur.com/XNsj1Qx.png" title="Patreon Page" width="15%" height="15%"></a>
 <a href="https://discord.gg/jjRrhpkH9e"><img src="https://i.imgur.com/egvRtMf.png" title="Discord Server" width="15%" height="15%"></a>
 
-<p align="left">
-  <a>
-  <img
-    src="https://i.imgur.com/ZVhPKbS.png"
-    width="40%"
-    height="40%"
-  ></a>
-  <a>
-  <img
-    src="https://i.imgur.com/0NStZzn.png"
-    width="55%"
-    height="55%"
-  ></a>
-</p>
+![Results graphs](https://i.imgur.com/E2raQNU.png)
 
 Implementation of the generalized Lorenz-Mie solution to Maxwell's equations. It outputs tabulated data for extinction/scattering cross sections, asymmetry factors
 and phase functions (unpolarized, perpendicular, parallel) from a set of parameters:
